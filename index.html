@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="/images/20261113_103621.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Learn liteC, a lightweight C web framework. Explore installation, routing, templates, forms, sessions, file uploads, validation, API examples and documentation.">
+<meta name="keywords" content="liteC, C web framework, lightweight C framework, C programming, web development in C, liteC documentation, Termux C development">
+<meta name="author" content="liteC Project">
+<meta name="robots" content="index, follow">
+<meta name="googlebot" content="index, follow">
+<meta name="theme-color" content="#0b1220">
+<meta property="og:type" content="website">
+<meta property="og:title" content="liteC — Lightweight C Web Framework Documentation">
+<meta property="og:description" content="Build web applications in C with compact routes, templates, forms, sessions and file uploads. Explore the liteC guide and API reference.">
+<meta property="og:site_name" content="liteC Documentation">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="liteC — Framework Documentation">
+<meta name="twitter:description" content="Guides and API reference for the lightweight liteC C web framework.">
+<title>liteC — Documentation</title>
+<style>
+:root{--bg:#0b1220;--panel:#111c2e;--panel2:#16243a;--text:#e8eef8;--muted:#9aabc2;--line:#263750;--green:#34d399;--green2:#059669;--code:#08111f;--link:#6ee7b7}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:84px}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+.top{height:64px;position:fixed;inset:0 0 auto;background:rgba(11,18,32,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);z-index:10;display:flex;align-items:center;padding:0 24px;gap:22px}
+.brand{font-size:22px;font-weight:800;letter-spacing:-1px;color:white}.brand span{color:var(--green)}
+.top small{color:var(--muted)}.top-right{margin-left:auto;display:flex;gap:12px;align-items:center}
+.search{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px 12px;width:min(260px,38vw);outline:none}
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr);max-width:1440px;margin:auto;padding-top:64px}
+aside{height:calc(100vh - 64px);position:sticky;top:64px;overflow:auto;border-right:1px solid var(--line);padding:24px 18px}
+.nav-label{font-size:11px;font-weight:800;color:#71839d;text-transform:uppercase;letter-spacing:1.3px;margin:18px 10px 7px}
+nav a{display:block;padding:7px 10px;border-radius:7px;color:var(--muted);font-size:14px}
+nav a:hover,nav a.active{background:var(--panel2);color:var(--green);text-decoration:none}
+main{max-width:960px;width:100%;padding:42px 54px 100px;margin:0 auto}
+.hero{padding:35px 0 42px;border-bottom:1px solid var(--line);margin-bottom:38px}
+.eyebrow{color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:1.8px;font-size:12px}
+h1{font-size:clamp(38px,6vw,62px);line-height:1.1;letter-spacing:-2px;margin:12px 0}
+h1 span{color:var(--green)}.lead{font-size:18px;color:var(--muted);max-width:700px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.btn{display:inline-block;background:var(--green2);color:white;padding:10px 16px;border-radius:8px;font-weight:700}.btn.secondary{background:var(--panel2);border:1px solid var(--line)}
+h2{font-size:29px;letter-spacing:-.7px;margin:48px 0 12px;padding-top:8px}
+h3{font-size:19px;margin:28px 0 8px}p{color:#c6d2e2;margin:10px 0 16px}
+.muted{color:var(--muted)}.note,.warning,.good{padding:14px 16px;border-radius:9px;margin:18px 0;border:1px solid var(--line);background:var(--panel)}
+.note{border-left:3px solid #60a5fa}.warning{border-left:3px solid #fbbf24}.good{border-left:3px solid var(--green)}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#1a2940;padding:2px 5px;border-radius:4px;color:#a7f3d0;font-size:.92em}
+pre{position:relative;background:var(--code);border:1px solid var(--line);border-radius:10px;padding:18px;overflow:auto;margin:14px 0 22px;color:#dbeafe;font:13px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace}
+pre code{padding:0;background:none;color:inherit}.copy{position:absolute;right:9px;top:9px;background:#1c2d45;border:1px solid #344964;color:#dce8f7;border-radius:6px;padding:5px 9px;cursor:pointer;font-size:12px}
+table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:14px}th,td{text-align:left;border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top}th{color:#a8f0d3;background:var(--panel)}td{color:#c6d2e2}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:20px 0}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}.tile b{display:block;color:#e9fff7;margin-bottom:5px}.tile span{font-size:13px;color:var(--muted)}
+.tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:20px;background:#173b31;color:#86efac;margin-left:6px}
+.tag.plan{background:#392e19;color:#fcd34d}
+section{border-bottom:1px solid var(--line);padding-bottom:20px}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+footer{color:var(--muted);border-top:1px solid var(--line);padding-top:25px;margin-top:55px;font-size:13px}
+#menu{display:none;background:none;color:white;border:1px solid var(--line);border-radius:7px;padding:6px 10px}
+.hidden{display:none!important}
+@media(max-width:850px){
+.layout{grid-template-columns:1fr}
+main{min-width:0}
+pre{max-width:100%;white-space:pre;overscroll-behavior-x:contain}
+table{display:block;overflow-x:auto;white-space:normal}
+aside{display:none;position:fixed;z-index:9;top:64px;left:0;width:280px;height:calc(100vh - 64px);background:var(--bg);box-shadow:15px 0 35px #0008}aside.open{display:block}main{padding:28px 22px 80px}#menu{display:block}.top{padding:0 14px;gap:12px}.top small{display:none}}
+@media(max-width:600px){
+.top{height:60px;padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right));gap:9px}
+.layout{padding-top:60px}
+aside{top:60px;height:calc(100dvh - 60px);padding-bottom:max(24px,env(safe-area-inset-bottom))}
+main{padding:22px 16px 70px}
+.hero{padding:20px 0 30px}
+.lead{font-size:16px}
+h2{font-size:24px;line-height:1.25}
+h3{font-size:18px}
+pre{font-size:12px;padding:15px 12px; padding-top:42px}
+.copy{top:7px;right:7px;min-height:32px}
+.btn{min-height:42px;display:inline-flex;align-items:center}
+nav a{padding:10px 12px}
+}
+@media(max-width:480px){.search{width:clamp(105px,35vw,145px)}.hero{padding-top:22px}h2{font-size:25px}}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "liteC Framework Documentation",
+  "description": "Documentation and examples for the lightweight liteC web framework written in C.",
+  "inLanguage": "en",
+  "about": {
+    "@type": "SoftwareApplication",
+    "name": "liteC",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Linux, Android with Termux"
+  }
+}
+</script>
+
+</head>
+<body>
+<header class="top">
+<button id="menu" aria-label="Open navigation">☰</button>
+<a class="brand" href="#top">lite<span>C</span></a><small>Framework documentation</small>
+<div class="top-right"><input id="search" class="search" type="search" placeholder="Search docs…" aria-label="Search documentation"></div>
+</header>
+<div class="layout">
+<aside id="sidebar"><nav>
+<div class="nav-label">Start here</div>
+<a href="#top">Introduction</a><a href="#status">API status</a><a href="#install">Installation</a><a href="#quickstart">Quick start</a>
+<div class="nav-label">Core concepts</div>
+<a href="#routes">Routing</a><a href="#responses">Responses</a><a href="#templates">Templates</a><a href="#request">Request data</a><a href="#sessions">Sessions</a>
+<div class="nav-label">Uploads</div>
+<a href="#uploads">File uploads</a><a href="#validation">Upload validation</a>
+<div class="nav-label">Reference</div>
+<a href="#api">API reference</a><a href="#example">Complete example</a><a href="#roadmap">Planned features</a><a href="#conventions">Conventions</a>
+</nav></aside>
+<main id="content">
+<div class="hero" id="top">
+<div class="eyebrow">Lightweight C web framework</div>
+<h1>Build web apps.<br><span>Keep C simple.</span></h1>
+<p class="lead">liteC is designed to make building web applications in C straightforward, with compact route declarations and simple helpers for common web tasks.</p>
+<div class="hero-actions"><a class="btn" href="#quickstart">Get started</a><a class="btn secondary" href="#api">Explore the API</a></div>
+</div>
+
+<section id="status">
+<h2>Documentation status</h2>
+<div class="good"><b>Documented from the work completed so far.</b><br>This site records the API and examples established in our project discussions. It is not a claim that every planned feature is already implemented in the current header.</div>
+<table><tr><th>Status</th><th>Meaning</th></tr>
+<tr><td><span class="tag">Established</span></td><td>Syntax or behavior explicitly agreed or used in the project.</td></tr>
+<tr><td><span class="tag plan">Planned / verify</span></td><td>Discussed as a future feature or helper; check the current <code>lite.h</code> before using it.</td></tr></table>
+<p class="muted">Because the latest <code>lite.h</code> source was not included with this documentation request, low-level implementation details are intentionally not guessed.</p>
+</section>
+
+<section id="install">
+<h2>Installation and setup</h2>
+<p>liteC is used as a header-based framework in the examples. Put <code>lite.h</code> beside your application source file.</p>
+<pre><code>myapp/
+├── app.c
+├── lite.h
+└── templates/
+    └── index.html</code></pre>
+<p>Compile with GCC or Clang:</p>
+<pre><code>gcc -Wall -Wextra -o app app.c</code></pre>
+<p>Run the compiled application:</p>
+<pre><code>./app</code></pre>
+<div class="note">On Android, the project workflow uses Termux. Make sure the compiler is installed and that the application has permission to read templates and write to upload directories.</div>
+</section>
+
+<section id="quickstart">
+<h2>Quick start</h2>
+<p>A minimal liteC application:</p>
+<pre><code>#include "lite.h"
+
+GET("/") {
+    return text("Hello, World!");
+}
+
+run(8080);</code></pre>
+<p>Open <code>http://localhost:8080</code> in your browser after starting the app.</p>
+<div class="warning"><b>Important:</b> <code>run(8080)</code> is the framework entry point in the examples and generates the program entry point. Do not wrap it in your own <code>main()</code>.</div>
+</section>
+
+<section id="routes">
+<h2>Routing</h2>
+<h3>GET routes</h3>
+<p>Use <code>GET()</code> to handle a route that receives a GET request.</p>
+<pre><code>GET("/") {
+    return text("Welcome!");
+}
+
+GET("/about") {
+    return text("About liteC");
+}</code></pre>
+<h3>POST routes</h3>
+<p>Use <code>POST()</code> for form submissions and other POST requests.</p>
+<pre><code>POST("/login") {
+    return text("Login request received");
+}</code></pre>
+<h3>Dynamic route parameters</h3>
+<p>Dynamic segments use angle brackets. Read the value with <code>param()</code>.</p>
+<pre><code>GET("/users/&lt;id&gt;") {
+    return text(param("id"));
+}</code></pre>
+<p>For example, a request to <code>/users/42</code> makes the <code>id</code> parameter available as <code>"42"</code>.</p>
+</section>
+
+<section id="responses">
+<h2>Responses</h2>
+<table><tr><th>Helper</th><th>Purpose</th></tr>
+<tr><td><code>text("...")</code></td><td>Return a plain-text response.</td></tr>
+<tr><td><code>html("...")</code></td><td>Return an HTML response.</td></tr>
+<tr><td><code>render(...)</code></td><td>Render a template from the templates directory.</td></tr></table>
+<pre><code>GET("/hello") {
+    return text("Hello!");
+}
+
+GET("/page") {
+    return html("&lt;h1&gt;Hello from HTML&lt;/h1&gt;");
+}</code></pre>
+</section>
+
+<section id="templates">
+<h2>Templates</h2>
+<p>Place template files in the <code>templates/</code> directory and render them by filename.</p>
+<pre><code>GET("/") {
+    return render("index.html");
+}</code></pre>
+<p>Pass values as key/value pairs:</p>
+<pre><code>GET("/profile") {
+    return render("profile.html",
+        "name", "Usman",
+        "role", "Developer");
+}</code></pre>
+<p>Example template using the established variable-substitution style:</p>
+<pre><code>&lt;h1&gt;Welcome, {{ name }}&lt;/h1&gt;
+&lt;p&gt;Role: {{ role }}&lt;/p&gt;</code></pre>
+<div class="warning">The simple key/value rendering API is established in the examples. Advanced template features such as loops, conditions, escaping rules, and nested layouts are not documented here because their exact syntax has not been confirmed.</div>
+</section>
+
+<section id="request">
+<h2>Request data: forms, query strings and parameters</h2>
+<h3>Form fields</h3>
+<p>Read submitted form values with <code>form("field")</code>.</p>
+<pre><code>POST("/login") {
+    const char *username = form("username");
+    const char *password = form("password");
+
+    return text(username);
+}</code></pre>
+<p><code>form()</code> returns a <code>const char *</code>. Use <code>const char *</code> when storing its result.</p>
+<h3>Query parameters</h3>
+<p>Read URL query values with <code>query()</code>.</p>
+<pre><code>GET("/search") {
+    return text(query("q"));
+}</code></pre>
+<p>For <code>/search?q=liteC</code>, the value of <code>q</code> is <code>liteC</code>.</p>
+<h3>Missing values</h3>
+<p>In the established API behavior, missing <code>query()</code> and <code>form()</code> values return an empty string (<code>""</code>).</p>
+</section>
+
+<section id="sessions">
+<h2>Sessions</h2>
+<p>Use sessions to keep simple user state between requests.</p>
+<h3>Set and read a session</h3>
+<pre><code>POST("/login") {
+    const char *username = form("username");
+    session_set("username", username);
+    return text("Logged in");
+}
+
+GET("/dashboard") {
+    const char *username = session_get("username");
+
+    if (!username)
+        return text("Please log in");
+
+    return text(username);
+}</code></pre>
+<h3>Session expiry</h3>
+<p>Pass <code>"-e"</code> followed by the expiry duration in seconds to enable expiry.</p>
+<pre><code>session_set("username", username, "-e", 600);</code></pre>
+<p>This example sets a 600-second expiry. Omit the expiry arguments for a session without the optional expiry setting.</p>
+<h3>Clear a session</h3>
+<pre><code>session_clear();</code></pre>
+<div class="note">The agreed API uses <code>session_get()</code>, <code>session_set()</code>, and <code>session_clear()</code>. Do not substitute a different session getter or assume a <code>session_destroy()</code> function exists.</div>
+</section>
+
+<section id="uploads">
+<h2>File uploads</h2>
+<p>Upload forms must use POST and <code>multipart/form-data</code>.</p>
+<pre><code>&lt;form action="/upload" method="POST" enctype="multipart/form-data"&gt;
+    &lt;input type="file" name="avatar"&gt;
+    &lt;button type="submit"&gt;Upload&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+<h3>Save an uploaded file</h3>
+<p>The agreed compact call is:</p>
+<pre><code>int status;
+upload_save("avatar", status, "myfiles/");</code></pre>
+<ul>
+<li><code>"avatar"</code> is the HTML file input name.</li>
+<li><code>status</code> is a caller-chosen integer variable.</li>
+<li><code>"myfiles/"</code> is the destination directory.</li>
+</ul>
+<p>Check the status after saving:</p>
+<pre><code>if (!status)
+    return text("Upload failed!");
+
+return text("Upload successful!");</code></pre>
+<div class="warning">Create the destination directory and ensure the process can write to it. The exact behavior for missing files, overwrite handling, and directory creation should be confirmed against the current implementation.</div>
+</section>
+
+<section id="validation">
+<h2>Basic upload validation</h2>
+<p>The current agreed example validates the file extension and size, then removes a file that fails validation.</p>
+<pre><code>#include "lite.h"
+
+GET("/") {
+    return render("index.html");
+}
+
+POST("/upload") {
+    int status;
+
+    upload_save("avatar", status, "myfiles/");
+
+    if (!status)
+        return render("result.html", "message", "Upload failed!");
+
+    int valid =
+        (!strcmp(upload_ext(), "png") ||
+         !strcmp(upload_ext(), "jpg") ||
+         !strcmp(upload_ext(), "jpeg")) &&
+        upload_size() &lt;= 2 * 1024 * 1024;
+
+    if (!valid) {
+        char path[512];
+        snprintf(path, sizeof(path), "myfiles/%s", upload_name());
+        remove(path);
+
+        return render("result.html",
+            "message", "Invalid file! PNG or JPG, maximum 2 MB.");
+    }
+
+    return render("result.html",
+        "message", "File uploaded successfully!");
+}
+
+run(8080);</code></pre>
+<div class="warning"><b>Validation order:</b> this example saves first, validates second, and removes the rejected file. It reflects the existing example, but a safer future implementation would validate the temporary upload before moving it into the final destination.</div>
+<p><b>Security note:</b> extension checks and client-provided MIME types do not prove the file's real content. For production use, verify file signatures/content, generate safe server-side filenames, prevent path traversal, and store uploads outside executable web directories where possible.</p>
+<h3>Upload helper reference</h3>
+<table><tr><th>Helper</th><th>Purpose</th><th>Status</th></tr>
+<tr><td><code>upload_save(input, status, directory)</code></td><td>Save the selected upload and set status.</td><td><span class="tag">Established</span></td></tr>
+<tr><td><code>upload_name()</code></td><td>Get the uploaded filename.</td><td><span class="tag">Used in example</span></td></tr>
+<tr><td><code>upload_size()</code></td><td>Get the uploaded file size.</td><td><span class="tag">Used in example</span></td></tr>
+<tr><td><code>upload_ext()</code></td><td>Get the uploaded file extension.</td><td><span class="tag">Used in example</span></td></tr>
+<tr><td><code>upload_type()</code></td><td>Get MIME type.</td><td><span class="tag plan">Verify in header</span></td></tr>
+<tr><td><code>upload_exists()</code></td><td>Convenience check for selected file.</td><td><span class="tag plan">Proposed</span></td></tr>
+<tr><td><code>upload_valid("png,jpg")</code></td><td>Convenience validation helper.</td><td><span class="tag plan">Proposed</span></td></tr></table>
+</section>
+
+<section id="api">
+<h2>API reference</h2>
+<table><tr><th>API</th><th>What it does</th></tr>
+<tr><td><code>GET("/path")</code></td><td>Declare a GET route.</td></tr>
+<tr><td><code>POST("/path")</code></td><td>Declare a POST route.</td></tr>
+<tr><td><code>run(port)</code></td><td>Start the application.</td></tr>
+<tr><td><code>param("name")</code></td><td>Read a dynamic route parameter.</td></tr>
+<tr><td><code>query("name")</code></td><td>Read a query-string value.</td></tr>
+<tr><td><code>form("name")</code></td><td>Read a submitted form value.</td></tr>
+<tr><td><code>text(value)</code></td><td>Send plain text.</td></tr>
+<tr><td><code>html(value)</code></td><td>Send HTML.</td></tr>
+<tr><td><code>render(file, ...)</code></td><td>Render a template and pass values.</td></tr>
+<tr><td><code>session_set(key, value, ...)</code></td><td>Store session data; optional <code>"-e", seconds</code> expiry.</td></tr>
+<tr><td><code>session_get(key)</code></td><td>Read session data; missing/empty returns NULL.</td></tr>
+<tr><td><code>session_clear()</code></td><td>Clear the current session.</td></tr>
+<tr><td><code>upload_save(input, status, dir)</code></td><td>Save a file upload.</td></tr>
+<tr><td><code>upload_name()</code>, <code>upload_size()</code>, <code>upload_ext()</code></td><td>Read upload metadata used by the current example.</td></tr></table>
+</section>
+
+<section id="example">
+<h2>Complete small example</h2>
+<p>A minimal login-style form flow using the established route, form, session and template APIs:</p>
+<pre><code>#include "lite.h"
+
+GET("/") {
+    return render("index.html");
+}
+
+POST("/login") {
+    const char *username = form("username");
+
+    if (!username[0])
+        return text("Enter your username");
+
+    session_set("username", username);
+    return text("Welcome!");
+}
+
+GET("/dashboard") {
+    const char *username = session_get("username");
+
+    if (!username)
+        return text("Please log in");
+
+    return render("dashboard.html", "username", username);
+}
+
+GET("/logout") {
+    session_clear();
+    return text("Logged out");
+}
+
+run(8080);</code></pre>
+<p>Example <code>templates/index.html</code>:</p>
+<pre><code>&lt;form action="/login" method="POST"&gt;
+    &lt;input name="username" placeholder="Username"&gt;
+    &lt;button type="submit"&gt;Log in&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+<p>Example <code>templates/dashboard.html</code>:</p>
+<pre><code>&lt;h1&gt;Welcome, {{ username }}&lt;/h1&gt;
+&lt;a href="/logout"&gt;Log out&lt;/a&gt;</code></pre>
+</section>
+
+<section id="roadmap">
+<h2>Planned features and items to verify</h2>
+<p>The following topics are part of the wider liteC direction, but this documentation does not claim they are implemented in the current header.</p>
+<div class="grid">
+<div class="tile"><b>Database integration</b><span class="tag plan">Planned</span><br><span>Simple database access API.</span></div>
+<div class="tile"><b>JSON helpers</b><span class="tag plan">Planned</span><br><span>JSON responses and request handling.</span></div>
+<div class="tile"><b>Cookies</b><span class="tag plan">Planned</span><br><span>Simple cookie helpers.</span></div>
+<div class="tile"><b>Static files</b><span class="tag plan">Planned</span><br><span>Serve CSS, JS, images and other assets.</span></div>
+<div class="tile"><b>Middleware</b><span class="tag plan">Planned</span><br><span>Reusable request processing.</span></div>
+<div class="tile"><b>Upload convenience helpers</b><span class="tag plan">Proposed</span><br><span><code>upload_exists()</code> and <code>upload_valid()</code>.</span></div>
+</div>
+<p>As these features are implemented, update this site with their exact signatures and tested examples.</p>
+</section>
+
+<section id="conventions">
+<h2>Project conventions</h2>
+<ul>
+<li>Keep application code short and readable.</li>
+<li>Use <code>const char *</code> for values returned by <code>form()</code> and other read-only string helpers.</li>
+<li>Use <code>GET()</code> and <code>POST()</code> route blocks rather than verbose handler boilerplate.</li>
+<li>Use <code>run(port)</code> as the application entry point in the examples.</li>
+<li>Keep optional behavior optional; do not force pointer-heavy syntax on the application author where the framework can provide a simpler API.</li>
+<li>Preserve existing API behavior when adding new helpers.</li>
+</ul>
+</section>
+
+<footer>
+<strong>liteC Documentation</strong><br>
+A concise guide to the APIs established so far. Keep this documentation in sync with the actual <code>lite.h</code> source and test every new API example before publishing it.
+</footer>
+</main>
+</div>
+<script>
+const menu=document.getElementById('menu'),sidebar=document.getElementById('sidebar');
+menu.addEventListener('click',()=>sidebar.classList.toggle('open'));
+sidebar.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>sidebar.classList.remove('open')));
+document.querySelectorAll('pre').forEach(pre=>{
+ const b=document.createElement('button');b.className='copy';b.textContent='Copy';
+ b.addEventListener('click',async()=>{const code=pre.querySelector('code').innerText;try{await navigator.clipboard.writeText(code);b.textContent='Copied!';setTimeout(()=>b.textContent='Copy',1200)}catch(e){b.textContent='Select code';}});
+ pre.appendChild(b);
+});
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+ const q=search.value.trim().toLowerCase();
+ document.querySelectorAll('main section').forEach(s=>{
+   s.classList.toggle('hidden',!!q&&!s.innerText.toLowerCase().includes(q));
+ });
+ document.querySelector('.hero').classList.toggle('hidden',!!q&&!document.querySelector('.hero').innerText.toLowerCase().includes(q));
+});
+const links=[...sidebar.querySelectorAll('a')];
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{
+ if(e.isIntersecting){links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));}
+}),{rootMargin:'-20% 0px -70% 0px'});
+document.querySelectorAll('main section,.hero').forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>

@@ -3,257 +3,211 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Official liteC documentation. Learn routing, templates, forms, sessions, CSRF protection, rate limiting, file uploads and more.">
-<meta name="keywords" content="liteC, C web framework, lightweight C framework, C programming, Termux, web development">
+<meta name="description" content="Official liteC documentation: an event-driven C web framework with epoll, HTTP routing, WebSockets, workers, templates, sessions, forms and uploads.">
+<meta name="keywords" content="liteC, C web framework, epoll, event-driven server, WebSockets, worker pool, Termux, C programming">
 <meta name="author" content="liteC Project">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0b1220">
 <meta property="og:type" content="website">
-<meta property="og:title" content="liteC — Lightweight C Web Framework">
-<meta property="og:description" content="Build web applications in C with simple routes, templates, sessions, CSRF protection and file uploads.">
+<meta property="og:title" content="liteC — Event-Driven C Web Framework">
+<meta property="og:description" content="Build concurrent web applications in C with epoll, WebSockets, workers, templates, sessions and uploads.">
 <meta property="og:site_name" content="liteC Documentation">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="liteC Documentation">
-<meta name="twitter:description" content="Documentation for the lightweight liteC C web framework.">
+<meta name="twitter:description" content="Documentation for the event-driven liteC C web framework.">
 <link rel="icon" type="image/png" href="/images/20261113_103621.png">
 <title>liteC — Documentation</title>
-
 <style>
-:root{
---bg:#0b1220;--panel:#111c2e;--panel2:#16243a;
---text:#e8eef8;--muted:#9aabc2;--line:#263750;
---green:#34d399;--green2:#059669;--code:#08111f;
---link:#6ee7b7
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:84px}
-body{margin:0;background:var(--bg);color:var(--text);font:15px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-a{color:var(--link);text-decoration:none}
-a:hover{text-decoration:underline}
+:root{--bg:#0b1220;--panel:#111c2e;--panel2:#16243a;--text:#e8eef8;--muted:#9aabc2;--line:#263750;--green:#34d399;--green2:#059669;--code:#08111f;--link:#6ee7b7}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:84px}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
 .top{height:64px;position:fixed;inset:0 0 auto;background:rgba(11,18,32,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);z-index:10;display:flex;align-items:center;padding:0 24px;gap:22px}
-.brand{font-size:22px;font-weight:800;letter-spacing:-1px;color:white}
-.brand span{color:var(--green)}
-.top small{color:var(--muted)}
-.top-right{margin-left:auto;display:flex;gap:12px;align-items:center}
+.brand{font-size:22px;font-weight:800;letter-spacing:-1px;color:white}.brand span{color:var(--green)}.top small{color:var(--muted)}.top-right{margin-left:auto;display:flex;gap:12px;align-items:center}
 .search{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px 12px;width:min(260px,38vw);outline:none}
 .layout{display:grid;grid-template-columns:260px minmax(0,1fr);max-width:1440px;margin:auto;padding-top:64px}
 aside{height:calc(100vh - 64px);position:sticky;top:64px;overflow:auto;border-right:1px solid var(--line);padding:24px 18px}
 .nav-label{font-size:11px;font-weight:800;color:#71839d;text-transform:uppercase;letter-spacing:1.3px;margin:18px 10px 7px}
-nav a{display:block;padding:7px 10px;border-radius:7px;color:var(--muted);font-size:14px}
-nav a:hover,nav a.active{background:var(--panel2);color:var(--green);text-decoration:none}
+nav a{display:block;padding:7px 10px;border-radius:7px;color:var(--muted);font-size:14px}nav a:hover,nav a.active{background:var(--panel2);color:var(--green);text-decoration:none}
 main{max-width:960px;width:100%;padding:42px 54px 100px;margin:0 auto}
-.hero{padding:35px 0 42px;border-bottom:1px solid var(--line);margin-bottom:38px}
-.eyebrow{color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:1.8px;font-size:12px}
-h1{font-size:clamp(38px,6vw,62px);line-height:1.1;letter-spacing:-2px;margin:12px 0}
-h1 span{color:var(--green)}
-.lead{font-size:18px;color:var(--muted);max-width:700px}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
-.btn{display:inline-block;background:var(--green2);color:white;padding:10px 16px;border-radius:8px;font-weight:700}
-.btn.secondary{background:var(--panel2);border:1px solid var(--line)}
-h2{font-size:29px;letter-spacing:-.7px;margin:48px 0 12px;padding-top:8px}
-h3{font-size:19px;margin:28px 0 8px}
-p{color:#c6d2e2;margin:10px 0 16px}
-.muted{color:var(--muted)}
-.note,.warning,.good{padding:14px 16px;border-radius:9px;margin:18px 0;border:1px solid var(--line);background:var(--panel)}
-.note{border-left:3px solid #60a5fa}
-.warning{border-left:3px solid #fbbf24}
-.good{border-left:3px solid var(--green)}
+.hero{padding:35px 0 42px;border-bottom:1px solid var(--line);margin-bottom:38px}.eyebrow{color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:1.8px;font-size:12px}
+h1{font-size:clamp(38px,6vw,62px);line-height:1.1;letter-spacing:-2px;margin:12px 0}h1 span{color:var(--green)}.lead{font-size:18px;color:var(--muted);max-width:700px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.btn{display:inline-block;background:var(--green2);color:white;padding:10px 16px;border-radius:8px;font-weight:700}.btn.secondary{background:var(--panel2);border:1px solid var(--line)}
+h2{font-size:29px;letter-spacing:-.7px;margin:48px 0 12px;padding-top:8px}h3{font-size:19px;margin:28px 0 8px}p{color:#c6d2e2;margin:10px 0 16px}.muted{color:var(--muted)}
+.note,.warning,.good{padding:14px 16px;border-radius:9px;margin:18px 0;border:1px solid var(--line);background:var(--panel)}.note{border-left:3px solid #60a5fa}.warning{border-left:3px solid #fbbf24}.good{border-left:3px solid var(--green)}
 code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#1a2940;padding:2px 5px;border-radius:4px;color:#a7f3d0;font-size:.92em}
-pre{position:relative;background:var(--code);border:1px solid var(--line);border-radius:10px;padding:18px;overflow:auto;margin:14px 0 22px;color:#dbeafe;font:13px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace}
-pre code{padding:0;background:none;color:inherit}
+pre{position:relative;background:var(--code);border:1px solid var(--line);border-radius:10px;padding:18px;overflow:auto;margin:14px 0 22px;color:#dbeafe;font:13px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace}pre code{padding:0;background:none;color:inherit}
 .copy{position:absolute;right:9px;top:9px;background:#1c2d45;border:1px solid #344964;color:#dce8f7;border-radius:6px;padding:5px 9px;cursor:pointer;font-size:12px}
-table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:14px}
-th,td{text-align:left;border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top}
-th{color:#a8f0d3;background:var(--panel)}
-td{color:#c6d2e2}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:20px 0}
-.tile{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
-.tile b{display:block;color:#e9fff7;margin-bottom:5px}
-.tile span{font-size:13px;color:var(--muted)}
-.tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:20px;background:#173b31;color:#86efac;margin-left:6px}
-.tag.plan{background:#392e19;color:#fcd34d}
-section{border-bottom:1px solid var(--line);padding-bottom:20px}
-:focus-visible{outline:2px solid var(--green);outline-offset:3px}
-footer{color:var(--muted);border-top:1px solid var(--line);padding-top:25px;margin-top:55px;font-size:13px}
-#menu{display:none;background:none;color:white;border:1px solid var(--line);border-radius:7px;padding:6px 10px}
-.hidden{display:none!important}
-@media(prefers-reduced-motion:reduce){
-html{scroll-behavior:auto}
-*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-}
-@media(max-width:850px){
-.layout{grid-template-columns:1fr}
-main{min-width:0}
-pre{max-width:100%;white-space:pre;overscroll-behavior-x:contain}
-table{display:block;overflow-x:auto;white-space:normal}
-aside{display:none;position:fixed;z-index:9;top:64px;left:0;width:280px;height:calc(100vh - 64px);background:var(--bg);box-shadow:15px 0 35px #0008}
-aside.open{display:block}
-main{padding:28px 22px 80px}
-#menu{display:block}
-.top{padding:0 14px;gap:12px}
-.top small{display:none}
-}
-@media(max-width:600px){
-.top{height:60px;padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right));gap:9px}
-.layout{padding-top:60px}
-aside{top:60px;height:calc(100dvh - 60px);padding-bottom:max(24px,env(safe-area-inset-bottom))}
-main{padding:22px 16px 70px}
-.hero{padding:20px 0 30px}
-.lead{font-size:16px}
-h2{font-size:24px;line-height:1.25}
-h3{font-size:18px}
-pre{font-size:12px;padding:15px 12px;padding-top:42px}
-.copy{top:7px;right:7px;min-height:32px}
-.btn{min-height:42px;display:inline-flex;align-items:center}
-nav a{padding:10px 12px}
-}
-@media(max-width:480px){
-.search{width:clamp(105px,35vw,145px)}
-.hero{padding-top:22px}
-h2{font-size:25px}
-}
+table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:14px}th,td{text-align:left;border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top}th{color:#a8f0d3;background:var(--panel)}td{color:#c6d2e2}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:20px 0}.tile{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}.tile b{display:block;color:#e9fff7;margin-bottom:5px}.tile span{font-size:13px;color:var(--muted)}
+.tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:20px;background:#173b31;color:#86efac;margin-left:6px}.tag.plan{background:#392e19;color:#fcd34d}
+section{border-bottom:1px solid var(--line);padding-bottom:20px}:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+footer{color:var(--muted);border-top:1px solid var(--line);padding-top:25px;margin-top:55px;font-size:13px}#menu{display:none;background:none;color:white;border:1px solid var(--line);border-radius:7px;padding:6px 10px}.hidden{display:none!important}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media(max-width:850px){.layout{grid-template-columns:1fr}main{min-width:0}pre{max-width:100%;white-space:pre;overscroll-behavior-x:contain}table{display:block;overflow-x:auto;white-space:normal}aside{display:none;position:fixed;z-index:9;top:64px;left:0;width:280px;height:calc(100vh - 64px);background:var(--bg);box-shadow:15px 0 35px #0008}aside.open{display:block}main{padding:28px 22px 80px}#menu{display:block}.top{padding:0 14px;gap:12px}.top small{display:none}}
+@media(max-width:600px){.top{height:60px;padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right));gap:9px}.layout{padding-top:60px}aside{top:60px;height:calc(100dvh - 60px);padding-bottom:max(24px,env(safe-area-inset-bottom))}main{padding:22px 16px 70px}.hero{padding:20px 0 30px}.lead{font-size:16px}h2{font-size:24px;line-height:1.25}h3{font-size:18px}pre{font-size:12px;padding:15px 12px;padding-top:42px}.copy{top:7px;right:7px;min-height:32px}.btn{min-height:42px;display:inline-flex;align-items:center}nav a{padding:10px 12px}}
+@media(max-width:480px){.search{width:clamp(105px,35vw,145px)}.hero{padding-top:22px}h2{font-size:25px}}
 </style>
 </head>
-
 <body>
 <header class="top">
 <button id="menu" aria-label="Open navigation">☰</button>
 <a class="brand" href="#top">lite<span>C</span></a>
 <small>Framework documentation</small>
-<div class="top-right">
-<input id="search" class="search" type="search" placeholder="Search docs…" aria-label="Search documentation">
-</div>
+<div class="top-right"><input id="search" class="search" type="search" placeholder="Search docs…" aria-label="Search documentation"></div>
 </header>
-
 <div class="layout">
-<aside id="sidebar">
-<nav>
+<aside id="sidebar"><nav>
 <div class="nav-label">Start here</div>
-<a href="#top">Introduction</a>
-<a href="#status">API status</a>
-<a href="#install">Installation</a>
-<a href="#quickstart">Quick start</a>
-
+<a href="#top">Introduction</a><a href="#status">Architecture & status</a><a href="#install">Installation</a><a href="#quickstart">Quick start</a>
+<div class="nav-label">Server engine</div>
+<a href="#event-loop">Event-driven engine</a><a href="#workers">Workers & blocking work</a><a href="#websockets">WebSockets</a>
 <div class="nav-label">Core concepts</div>
-<a href="#routes">Routing</a>
-<a href="#responses">Responses</a>
-<a href="#templates">Templates</a>
-<a href="#request">Request data</a>
-<a href="#sessions">Sessions</a>
-
-<div class="nav-label">Security</div>
-<a href="#csrf">CSRF protection</a>
-<a href="#ratelimit">Rate limiting</a>
-
-<div class="nav-label">Uploads</div>
-<a href="#uploads">File uploads</a>
-<a href="#validation">Upload validation</a>
-
+<a href="#routes">Routing</a><a href="#responses">Responses</a><a href="#templates">Templates</a><a href="#request">Request data</a><a href="#sessions">Sessions & cookies</a>
+<div class="nav-label">Security & files</div>
+<a href="#csrf">CSRF protection</a><a href="#ratelimit">Rate limiting</a><a href="#uploads">File uploads</a><a href="#validation">Upload validation</a><a href="#static">Static files</a>
 <div class="nav-label">Reference</div>
-<a href="#api">API reference</a>
-<a href="#example">Complete example</a>
-<a href="#roadmap">Planned features</a>
-<a href="#conventions">Conventions</a>
-</nav>
-</aside>
-
+<a href="#api">API reference</a><a href="#example">Complete example</a><a href="#conventions">Best practices</a><a href="#roadmap">Roadmap & verification</a>
+</nav></aside>
 <main id="content">
-
 <div class="hero" id="top">
-<div class="eyebrow">Lightweight C web framework</div>
+<div class="eyebrow">Event-driven C web framework</div>
 <h1>Build web apps.<br><span>Keep C simple.</span></h1>
-<p class="lead">liteC brings a simple, compact web development experience to C. Build applications with readable routes, templates, forms, sessions, security features and file uploads.</p>
-<div class="hero-actions">
-<a class="btn" href="https://github.com/litecframework/Litec">Get started</a>
-<a class="btn secondary" href="#api">Explore the API</a>
-</div>
+<p class="lead">liteC is a lightweight C web framework with an epoll-based event-driven HTTP engine, non-blocking connections, WebSockets and a worker pool—wrapped in concise route declarations and practical application helpers.</p>
+<div class="hero-actions"><a class="btn" href="https://github.com/litecframework/Litec">Get started</a><a class="btn secondary" href="#api">Explore the API</a></div>
 </div>
 
 <section id="status">
-<h2>Framework status</h2>
-<div class="good">
-<b>Documentation reflects the features established in the current liteC development work.</b><br>
-Features are separated into established and planned items. Always check the actual header for the exact implementation and available configuration.
-</div>
-<table>
-<tr><th>Status</th><th>Meaning</th></tr>
-<tr><td><span class="tag">Established</span></td><td>API or behavior used in the project examples or implementation.</td></tr>
-<tr><td><span class="tag plan">Verify</span></td><td>Discussed or partially developed; confirm its exact API in the current header before use.</td></tr>
-</table>
-<p class="muted">liteC is designed around concise route declarations and framework helpers rather than repetitive HTTP boilerplate.</p>
+<h2>Framework architecture & status</h2>
+<div class="good"><b>Current development direction: event-driven HTTP with optional worker offloading.</b><br>The current unified development build brings the epoll server, HTTP application helpers, WebSockets and worker support together. Check the exact header revision you ship before relying on optional configuration or extension details.</div>
+<table><tr><th>Component</th><th>Current documented capability</th></tr>
+<tr><td>HTTP engine</td><td>Linux epoll event loop, non-blocking sockets and incremental connection handling.</td></tr>
+<tr><td>HTTP application API</td><td>Block-style <code>GET()</code> and <code>POST()</code> routes and response helpers.</td></tr>
+<tr><td>Concurrency</td><td>Multiple connections are managed by the event loop; a worker pool is available for blocking tasks.</td></tr>
+<tr><td>WebSockets</td><td>Handshake and message support, ping/pong, close handling and broadcasting helpers.</td></tr>
+<tr><td>Application helpers</td><td>Templates, forms, sessions, cookies, static files, uploads, CSRF and rate limiting, subject to the selected header build.</td></tr></table>
+<p class="muted">The event loop and the worker pool have different jobs. The event loop manages socket readiness and connection state; workers run tasks that should not hold up that loop.</p>
 </section>
 
 <section id="install">
-<h2>Installation</h2>
-<p>Place the liteC header beside your application source.</p>
+<h2>Installation & compilation</h2>
+<p>Place the unified LiteC header beside your application source and keep runtime directories such as <code>templates/</code>, <code>static/</code> and <code>uploads/</code> where the application can access them.</p>
 <pre><code>myapp/
 ├── app.c
-├── lite-secure.h
-└── templates/
-    └── index.html</code></pre>
-<p>Compile with GCC or Clang:</p>
-<pre><code>gcc -std=gnu11 -Wall -Wextra -O2 app.c -o app</code></pre>
-<p>Run the application:</p>
-<pre><code>./app</code></pre>
-<div class="note">The development workflow supports Linux and Android environments such as Termux. Ensure the application can read its templates and write to its upload directory.</div>
+├── lite_epoll.h
+├── templates/
+│   └── index.html
+├── static/
+│   └── style.css
+└── uploads/</code></pre>
+<p>Compile with pthread support because the worker-pool build uses threads:</p>
+<pre><code>gcc -std=gnu11 -Wall -Wextra -O2 -pthread app.c -o app</code></pre>
+<p>Run the application:</p><pre><code>./app</code></pre>
+<div class="note">The project has been developed and used in Linux and Android/Termux workflows. The documented default listener in the current development build is loopback (<code>127.0.0.1</code>); do not assume it is exposed to other devices on your network.</div>
 </section>
 
 <section id="quickstart">
 <h2>Quick start</h2>
-<p>A basic liteC application:</p>
-<pre><code>#include "lite-secure.h"
+<pre><code>#include "lite_epoll.h"
 
 GET("/") {
-    return text("Hello, World!");
+    return html("&lt;h1&gt;Hello, LiteC!&lt;/h1&gt;");
 }
 
 GET("/about") {
     return text("About liteC");
 }
 
-run(8200);</code></pre>
-<p>Open <code>http://127.0.0.1:8200</code> in your browser.</p>
-<div class="warning">The framework's <code>run()</code> entry point is used in these examples. Follow the current header's required syntax and do not add a separate <code>main()</code> unless the implementation requires it.</div>
+run(8080);</code></pre>
+<p>Open <code>http://127.0.0.1:8080</code>. The final <code>run(8080)</code> starts the server and enters its event loop.</p>
+<div class="note">Use the actual header filename in your project. The examples on this page use <code>lite_epoll.h</code> as the unified event-driven header name; if your checked-out release uses another filename, change only the include.</div>
+</section>
+
+<section id="event-loop">
+<h2>Event-driven HTTP engine</h2>
+<p>Earlier blocking server designs accept a client and perform the request/response work synchronously. The event-driven LiteC engine uses Linux <code>epoll</code> to monitor many sockets without dedicating a blocked thread to every connected client.</p>
+<h3>How the event loop works</h3>
+<ol>
+<li>The server creates a listening socket and registers it with <code>epoll</code>.</li>
+<li>Accepted client sockets are configured for non-blocking I/O and registered with the event loop.</li>
+<li>The loop waits for readiness events and processes whichever connections can currently be read or written.</li>
+<li>Each connection keeps its own incremental request and response state, allowing partial reads and writes to continue across events.</li>
+<li>When a response has been completely written, the connection can be reused or closed according to the HTTP connection state.</li>
+</ol>
+<div class="good"><b>Why this matters:</b> many idle or active client connections can be managed by one event loop without a thread blocked on every socket.</div>
+<h3>Connection capacity</h3>
+<p>The current development configuration has a default connection capacity of <code>256</code> simultaneous connection slots. This is a compile-time/configuration limit, not a promise of a particular requests-per-second figure. Raising it requires checking the matching header's capacity settings and memory requirements.</p>
+<h3>Event-driven does not mean every route is asynchronous</h3>
+<p>Route blocks remain ordinary C code and are dispatched synchronously by the event loop. A short handler that validates input and returns a response is straightforward. A handler that sleeps, performs a slow synchronous database operation, or waits on slow file/network I/O holds up the event-loop thread while it runs.</p>
+<div class="warning"><b>Do not block the event loop.</b> Keep route handlers short. Move slow or blocking work to the worker facility, then return its result to the event-loop side using the mechanism supported by the current header. Do not call LiteC request/response APIs from a worker thread unless the framework explicitly documents that operation as thread-safe.</div>
+</section>
+
+<section id="workers">
+<h2>Worker pool & blocking operations</h2>
+<p>LiteC combines event-driven socket handling with a worker pool. The event loop remains responsible for network events; workers handle tasks that may take time or block.</p>
+<h3>Start with the default event loop</h3>
+<pre><code>run(8080);</code></pre>
+<h3>Start with an explicit worker count</h3>
+<pre><code>run_workers(8080, 8);</code></pre>
+<p>This example starts the server on port <code>8080</code> with a worker pool configured for eight workers in the development API.</p>
+<h3>Offload slow work with blocking()</h3>
+<p><code>blocking()</code> is the worker-offloading facility discussed for moving slow operations away from the event-loop thread. Use the exact callback/signature exposed by the header version you are compiling; do not guess a callback prototype from this overview.</p>
+<div class="note">Good worker tasks include slow synchronous database calls, expensive password hashing, CPU-heavy processing and blocking third-party library calls. Keep tasks bounded so a few long-running jobs do not occupy the entire worker pool.</div>
+<h3>Thread-safety rules</h3>
+<ul>
+<li>Do not access global request/response state from a worker thread.</li>
+<li>Do not call route response helpers from a worker unless the API explicitly marshals the operation back to the event loop.</li>
+<li>Pass worker tasks the data they need; avoid pointers to request data whose lifetime may end before the task completes.</li>
+<li>Keep WebSocket/event-loop callbacks short. Offload expensive work rather than holding up socket processing.</li>
+<li>Use a sensible worker count for the device and workload; more threads do not automatically mean higher throughput.</li>
+</ul>
+</section>
+
+<section id="websockets">
+<h2>WebSockets</h2>
+<p>The unified event-driven development build includes WebSocket support alongside HTTP. WebSockets upgrade an HTTP connection into a persistent, two-way channel, making them useful for chat, dashboards, live status and interactive applications.</p>
+<h3>Capabilities</h3>
+<table><tr><th>Capability</th><th>Description</th></tr>
+<tr><td>Handshake</td><td>HTTP upgrade negotiation to establish a WebSocket connection.</td></tr>
+<tr><td>Messages</td><td>Receive and send WebSocket messages using the WebSocket API exposed by the header.</td></tr>
+<tr><td>Ping/pong</td><td>Protocol control frames for connection liveness.</td></tr>
+<tr><td>Close handling</td><td>Handle connection shutdown and cleanup.</td></tr>
+<tr><td>Broadcast</td><td>Send a message to connected WebSocket clients through the broadcast facility.</td></tr></table>
+<div class="warning">WebSocket callback names and exact signatures must be copied from the release header. This overview intentionally does not invent callback names. Keep callbacks short and do not perform blocking work directly inside them.</div>
+<h3>Typical use cases</h3>
+<ul><li>Live notifications and chat.</li><li>Real-time monitoring dashboards.</li><li>Device status and telemetry updates.</li><li>Collaborative or interactive browser applications.</li></ul>
 </section>
 
 <section id="routes">
 <h2>Routing</h2>
-<h3>GET routes</h3>
-<p>Use <code>GET()</code> to declare a route that handles GET requests.</p>
-<pre><code>GET("/") {
+<h3>GET routes</h3><pre><code>GET("/") {
     return text("Welcome!");
 }
 
 GET("/about") {
     return text("About liteC");
 }</code></pre>
+<h3>POST routes</h3><pre><code>POST("/login") {
+    char *username = form_get("username", "");
+    char *password = form_get("password", "");
 
-<h3>POST routes</h3>
-<p>Use <code>POST()</code> for form submissions and other POST requests.</p>
-<pre><code>POST("/login") {
-    const char *username = form("username");
+    if (!username[0] || !password[0])
+        return text("Username and password required");
 
     return text("Login request received");
 }</code></pre>
-
-<h3>Dynamic route parameters</h3>
-<p>Use angle-bracket route segments and retrieve their values with <code>param()</code>.</p>
-<pre><code>GET("/users/&lt;id&gt;") {
-    return text(param("id"));
+<h3>Dynamic route parameters</h3><pre><code>GET("/users/&lt;id&gt;") {
+    return text("User ID: %s", param("id"));
 }</code></pre>
 <p>For <code>/users/42</code>, the route parameter <code>id</code> contains <code>42</code>.</p>
 </section>
 
 <section id="responses">
 <h2>Responses</h2>
-<table>
-<tr><th>Helper</th><th>Purpose</th></tr>
+<table><tr><th>Helper</th><th>Purpose</th></tr>
 <tr><td><code>text(...)</code></td><td>Return a plain-text response.</td></tr>
 <tr><td><code>html(...)</code></td><td>Return an HTML response.</td></tr>
 <tr><td><code>render(...)</code></td><td>Render a template with supplied values.</td></tr>
-<tr><td><code>redirect(...)</code></td><td>Redirect the client to another location.</td></tr>
-</table>
-
+<tr><td><code>redirect(...)</code></td><td>Redirect the client.</td></tr></table>
 <pre><code>GET("/hello") {
     return text("Hello!");
 }
@@ -265,320 +219,235 @@ GET("/page") {
 GET("/old") {
     return redirect("/");
 }</code></pre>
-<p>Use the response helpers rather than manually constructing HTTP response headers for ordinary routes.</p>
 </section>
 
 <section id="templates">
 <h2>Templates</h2>
-<p>Place HTML templates inside the <code>templates/</code> directory.</p>
+<p>Keep HTML files in the <code>templates/</code> directory.</p>
 <pre><code>GET("/") {
     return render("index.html");
-}</code></pre>
+}
 
-<h3>Pass template values</h3>
-<pre><code>GET("/profile") {
+GET("/profile") {
     return render("profile.html",
         "name", "Usman",
         "role", "Developer");
 }</code></pre>
-
-<p>Use double curly braces to display values:</p>
+<p>Template values can be displayed with double curly braces:</p>
 <pre><code>&lt;h1&gt;Welcome, {{ name }}&lt;/h1&gt;
 &lt;p&gt;Role: {{ role }}&lt;/p&gt;</code></pre>
-
 <h3>Template conditions</h3>
-<p>The established template syntax includes conditional blocks:</p>
 <pre><code>{% if logged_in %}
     &lt;h1&gt;Welcome back!&lt;/h1&gt;
 {% else %}
     &lt;h1&gt;Please log in&lt;/h1&gt;
 {% endif %}</code></pre>
-
-<div class="note">Template values support HTML escaping in the established template implementation. Check the current header for the exact escaping behavior and any additional template syntax.</div>
+<div class="note">Confirm supported template expressions and escaping behavior against the exact header revision. Never treat untrusted user input as trusted HTML.</div>
 </section>
 
 <section id="request">
 <h2>Request data</h2>
-
-<h3>Form fields</h3>
-<p>Read submitted form values using <code>form()</code>.</p>
+<h3>Form fields — form_get()</h3>
+<p>Use <code>form_get()</code> to read submitted form values. Its two-argument form supplies a fallback value when the field is absent.</p>
 <pre><code>POST("/login") {
-    const char *username = form("username");
-    const char *password = form("password");
+    char *username = form_get("username", "");
+    char *password = form_get("password", "");
 
-    if (!username || !username[0])
+    if (!username[0])
         return text("Username required");
 
     return text("Welcome, %s", username);
 }</code></pre>
-
-<h3>Query strings</h3>
-<p>Read URL query parameters using <code>query()</code>.</p>
-<pre><code>GET("/search") {
+<table><tr><th>Example</th><th>Meaning</th></tr>
+<tr><td><code>form_get("username", "")</code></td><td>Return the submitted username or an empty string fallback.</td></tr>
+<tr><td><code>form_get("username", "Guest")</code></td><td>Return the submitted username or <code>Guest</code>.</td></tr>
+<tr><td><code>form_get("password", "")</code></td><td>Read the password field with an empty fallback.</td></tr></table>
+<h3>Query strings</h3><pre><code>GET("/search") {
     return text("Search: %s", query("q"));
 }</code></pre>
 <p>For <code>/search?q=liteC</code>, the query value is <code>liteC</code>.</p>
-
-<h3>Route parameters</h3>
-<pre><code>GET("/products/&lt;id&gt;") {
+<h3>Route parameters</h3><pre><code>GET("/products/&lt;id&gt;") {
     return text("Product ID: %s", param("id"));
 }</code></pre>
-
-<h3>Supported form encoding</h3>
-<p>liteC handles URL-encoded form submissions and multipart request bodies for file uploads.</p>
-<pre><code>&lt;form method="POST" action="/login"&gt;
-    &lt;input name="username"&gt;
-    &lt;input name="password" type="password"&gt;
-    &lt;button type="submit"&gt;Login&lt;/button&gt;
-&lt;/form&gt;</code></pre>
+<h3>Form encoding</h3>
+<p>URL-encoded form fields are available through the form API. Multipart requests are used for browser file uploads. The exact parser limits and supported multipart features are defined by the header build.</p>
 </section>
 
 <section id="sessions">
-<h2>Sessions</h2>
-<p>Sessions let an application keep user-specific state between requests.</p>
-
-<h3>Set a session value</h3>
-<pre><code>POST("/login") {
-    const char *username = form("username");
+<h2>Sessions & cookies</h2>
+<p>Sessions keep user-specific state across requests. Use the session helpers exposed by the framework.</p>
+<h3>Set a session value</h3><pre><code>POST("/login") {
+    char *username = form_get("username", "");
 
     session_set("username", username);
 
     return redirect("/dashboard");
 }</code></pre>
-
-<h3>Read a session value</h3>
-<pre><code>GET("/dashboard") {
+<h3>Read a session value</h3><pre><code>GET("/dashboard") {
     const char *username = session_get("username");
 
     if (!username)
-        return redirect("/login");
+        return redirect("/");
 
     return text("Welcome, %s", username);
 }</code></pre>
+<h3>Expiry and clearing</h3><pre><code>session_set("username", username, "-e", 600);
 
-<h3>Session expiry</h3>
-<p>The expiry form used in the project is:</p>
-<pre><code>session_set("username", username, "-e", 600);</code></pre>
-<p>This example requests a 600-second expiry.</p>
-
-<h3>Clear session data</h3>
-<pre><code>GET("/logout") {
+GET("/logout") {
     session_clear();
-    return redirect("/login");
+    return redirect("/");
 }</code></pre>
-
-<div class="note">The framework has bounded session storage and session-key capacity. Check the current header for the configured limits. Session data is not a replacement for persistent database storage.</div>
+<p>The expiry example requests a 600-second lifetime. Session storage is not a substitute for a persistent database. Use cookie/session settings appropriate for your deployment and HTTPS environment.</p>
 </section>
 
 <section id="csrf">
 <h2>CSRF protection</h2>
-<p>liteC includes CSRF protection for browser-based form submissions.</p>
-
-<h3>Automatic HTML form protection</h3>
-<p>When automatic CSRF protection is active, liteC handles the token integration for ordinary HTML POST forms. Developers do not need to manually create a token field for each form.</p>
+<p>CSRF protection helps prevent a third-party site from causing a user's browser to submit unwanted authenticated requests.</p>
+<h3>Protected HTML forms</h3>
+<p>When automatic CSRF integration is enabled in the selected build, supported HTML POST forms receive token integration from LiteC.</p>
 <pre><code>&lt;form action="/register" method="POST"&gt;
     &lt;input name="username" required&gt;
     &lt;input name="password" type="password" required&gt;
     &lt;button type="submit"&gt;Create account&lt;/button&gt;
 &lt;/form&gt;</code></pre>
-
-<p>The framework's HTML integration can provide:</p>
-<ul>
-<li>A hidden <code>_lite_csrf</code> field in supported POST forms.</li>
-<li>A <code>lite-csrf-token</code> meta tag for JavaScript requests.</li>
-<li>Automatic verification before a protected POST route is executed.</li>
-</ul>
-
-<h3>JavaScript fetch and AJAX</h3>
-<p>For JavaScript requests, read the meta token and send it in the <code>X-Lite-CSRF-Token</code> header.</p>
+<h3>JavaScript requests</h3>
+<p>For JavaScript requests, use the CSRF token exposed by the rendered page and send it in the <code>X-Lite-CSRF-Token</code> header when required by the active configuration.</p>
 <pre><code>const token = document.querySelector(
-    'meta[name="lite-csrf-token"]'
+  'meta[name="lite-csrf-token"]'
 )?.content;
 
 const data = new FormData();
 data.append("username", "example");
 
 const response = await fetch("/profile", {
-    method: "POST",
-    headers: {
-        "X-Lite-CSRF-Token": token
-    },
-    body: data
+  method: "POST",
+  headers: { "X-Lite-CSRF-Token": token },
+  body: data
 });</code></pre>
-
-<div class="warning">Do not manually set the multipart Content-Type header when sending FormData. The browser must generate its boundary automatically. Also ensure the rendered page actually contains the CSRF meta tag before sending the request.</div>
-
-<h3>CSRF behavior</h3>
-<table>
-<tr><th>Request type</th><th>Token handling</th></tr>
-<tr><td>Supported HTML POST form</td><td>Automatic hidden token integration.</td></tr>
-<tr><td>JavaScript fetch/AJAX</td><td>Send the token in <code>X-Lite-CSRF-Token</code>.</td></tr>
-<tr><td>Multipart upload</td><td>Supports the CSRF header alongside multipart form handling.</td></tr>
-</table>
-<p>CSRF is designed to protect browser requests. Developers should check the current header for configuration controls and any manual-verification API before relying on a particular function name.</p>
+<div class="warning">Do not manually set the multipart Content-Type when sending browser FormData; the browser must generate the boundary. CSRF enforcement and route exemptions depend on the active header configuration. In the upload-fix build discussed in the project, the upload route is exempted so a basic multipart upload can be submitted without a token; do not assume every LiteC build has that exemption.</div>
 </section>
 
 <section id="ratelimit">
 <h2>Rate limiting</h2>
-<p>liteC provides a route rate-limiting declaration to restrict repeated requests.</p>
-
+<p>Use the route rate-limit declaration where it is enabled in the current build:</p>
 <pre><code>RATE_LIMIT("/login", 5, 60);
 
 POST("/login") {
-    const char *username = form("username");
-
+    char *username = form_get("username", "");
     return text("Login request received");
 }</code></pre>
-
-<p>In this example, the route is configured for a limit of five requests within a 60-second window.</p>
-
-<h3>Example: protect account creation</h3>
-<pre><code>RATE_LIMIT("/register", 5, 60);
-
-POST("/register") {
-    const char *username = form("username");
-
-    return text("Registration request received");
-}</code></pre>
-
-<div class="note">Rate limiting is useful for login, registration and other sensitive endpoints. Confirm the current implementation's client-identification method, response status and reset behavior in the header.</div>
+<p>This configures a limit of five requests in a 60-second window for the route, according to the implementation's client tracking and reset behavior.</p>
+<div class="note">Confirm the active build's rate-limit identity key, status response and storage limits in the header before deploying it publicly.</div>
 </section>
 
 <section id="uploads">
 <h2>File uploads</h2>
-<p>liteC supports multipart file uploads through <code>upload_save()</code>.</p>
-
-<h3>HTML upload form</h3>
+<p>LiteC's multipart upload helper saves an uploaded file into a destination directory.</p>
+<h3>HTML form</h3>
 <pre><code>&lt;form action="/upload" method="POST"
       enctype="multipart/form-data"&gt;
-    &lt;input type="file" name="attachment"&gt;
+    &lt;input type="file" name="file" required&gt;
     &lt;button type="submit"&gt;Upload&lt;/button&gt;
 &lt;/form&gt;</code></pre>
-
-<h3>Save an uploaded file</h3>
+<h3>POST route</h3>
 <pre><code>POST("/upload") {
     int saved = 0;
 
-    if (!upload_save("attachment", saved, "uploads") || !saved)
-        return text("Upload failed");
-
-    return text("Upload successful");
-}</code></pre>
-
-<p>The arguments are:</p>
-<ul>
-<li><code>"attachment"</code> — the HTML file input name.</li>
-<li><code>saved</code> — an integer status variable.</li>
-<li><code>"uploads"</code> — the destination directory.</li>
-</ul>
-
-<h3>Upload metadata</h3>
-<p>The current application examples use these helpers after saving an upload:</p>
-<pre><code>POST("/upload") {
-    int saved = 0;
-
-    if (!upload_save("attachment", saved, "uploads") || !saved)
+    if (!upload_save("file", saved, "uploads") || !saved)
         return text("Upload failed");
 
     return text("Uploaded: %s (%zu bytes)",
-                upload_name(),
-                upload_size());
+                upload_name(), upload_size());
 }</code></pre>
-
-<table>
-<tr><th>Helper</th><th>Purpose</th></tr>
-<tr><td><code>upload_save(input, status, directory)</code></td><td>Save the selected multipart file.</td></tr>
-<tr><td><code>upload_name()</code></td><td>Read the uploaded filename.</td></tr>
-<tr><td><code>upload_size()</code></td><td>Read the uploaded file size.</td></tr>
-<tr><td><code>upload_ext()</code></td><td>Read the uploaded file extension.</td></tr>
-</table>
-
-<div class="warning">Create the destination directory when required and ensure the process can write to it. Never trust the original filename or extension as proof that a file is safe.</div>
+<p>The first argument to <code>upload_save()</code> is the HTML input name. The second is the status variable used by this API. The third is the destination directory.</p>
+<table><tr><th>Helper</th><th>Purpose</th></tr>
+<tr><td><code>upload_save("file", saved, "uploads")</code></td><td>Save the multipart file field named <code>file</code>.</td></tr>
+<tr><td><code>upload_name()</code></td><td>Read the uploaded filename metadata.</td></tr>
+<tr><td><code>upload_type()</code></td><td>Read the uploaded content type.</td></tr>
+<tr><td><code>upload_ext()</code></td><td>Read the uploaded extension.</td></tr>
+<tr><td><code>upload_size()</code></td><td>Read the uploaded file size.</td></tr></table>
+<h3>Prepare the destination</h3><pre><code>mkdir -p uploads
+chmod u+rwx uploads</code></pre>
+<div class="warning">The server process must have permission to write to the destination directory. Match the HTML input name exactly to the name passed to <code>upload_save()</code>. Never trust the original filename, extension or browser-provided MIME type as proof that a file is safe.</div>
 </section>
 
 <section id="validation">
-<h2>Upload validation and security</h2>
-<p>Applications should validate uploaded files before making them available to users.</p>
-
-<h3>Extension and size checks</h3>
+<h2>Upload validation & security</h2>
 <pre><code>POST("/upload") {
     int saved = 0;
 
-    if (!upload_save("attachment", saved, "uploads") || !saved)
+    if (!upload_save("file", saved, "uploads") || !saved)
         return text("Upload failed");
 
-    int valid =
-        (!strcmp(upload_ext(), "png") ||
-         !strcmp(upload_ext(), "jpg") ||
-         !strcmp(upload_ext(), "jpeg")) &&
-        upload_size() &lt;= 2 * 1024 * 1024;
+    if (upload_size() > 2 * 1024 * 1024)
+        return text("File too large");
 
-    if (!valid)
-        return text("Invalid file");
+    if (strcmp(upload_ext(), "png") &&
+        strcmp(upload_ext(), "jpg") &&
+        strcmp(upload_ext(), "jpeg"))
+        return text("Unsupported file extension");
 
-    return text("Upload successful");
+    return text("Upload received");
 }</code></pre>
+<p>This illustrates extension and size checks using the upload helpers. For production, validate the actual file contents/signature as well, generate safe server-side filenames, prevent script execution in upload storage and consider storing private files outside the public web root.</p>
+</section>
 
-<p>This example demonstrates checks using the upload metadata helpers. It does not establish that the uploaded file's actual contents match its extension.</p>
-
-<h3>Security recommendations</h3>
-<ul>
-<li>Use server-generated filenames where possible.</li>
-<li>Check file contents and signatures, not only extensions.</li>
-<li>Limit upload sizes.</li>
-<li>Prevent uploaded files from being executed as scripts.</li>
-<li>Keep sensitive uploads outside publicly executable directories.</li>
-<li>Use CSRF protection for authenticated browser upload requests.</li>
-<li>Use rate limiting on sensitive routes.</li>
-</ul>
+<section id="static">
+<h2>Static files</h2>
+<p>The development project includes static-file serving support in the unified server work. Keep assets in a dedicated directory such as <code>static/</code> and reference them from HTML using the URL prefix configured by the active header.</p>
+<pre><code>myapp/
+├── app.c
+├── lite_epoll.h
+├── templates/
+│   └── index.html
+└── static/
+    ├── style.css
+    └── app.js</code></pre>
+<div class="note">The exact static mount function or URL prefix is header-version-specific. This page does not invent a registration function; use the static-file API documented in the header you ship.</div>
 </section>
 
 <section id="api">
 <h2>API reference</h2>
-<table>
-<tr><th>API</th><th>Purpose</th></tr>
+<table><tr><th>API / facility</th><th>Purpose</th></tr>
 <tr><td><code>GET("/path")</code></td><td>Declare a GET route.</td></tr>
 <tr><td><code>POST("/path")</code></td><td>Declare a POST route.</td></tr>
-<tr><td><code>run(port)</code></td><td>Start the application.</td></tr>
-<tr><td><code>param("name")</code></td><td>Read a dynamic route parameter.</td></tr>
-<tr><td><code>query("name")</code></td><td>Read a query-string value.</td></tr>
-<tr><td><code>form("name")</code></td><td>Read a submitted form value.</td></tr>
+<tr><td><code>run(port)</code></td><td>Start the event-driven server.</td></tr>
+<tr><td><code>run_workers(port, count)</code></td><td>Start with an explicit worker-pool size.</td></tr>
+<tr><td><code>blocking()</code></td><td>Worker-offloading facility; use the callback form defined by the header.</td></tr>
 <tr><td><code>text(...)</code></td><td>Return plain text.</td></tr>
 <tr><td><code>html(...)</code></td><td>Return HTML.</td></tr>
-<tr><td><code>render(...)</code></td><td>Render an HTML template.</td></tr>
+<tr><td><code>render(...)</code></td><td>Render a template.</td></tr>
 <tr><td><code>redirect(...)</code></td><td>Redirect the client.</td></tr>
+<tr><td><code>form_get("name", "default")</code></td><td>Read a submitted form field with a fallback.</td></tr>
+<tr><td><code>query("name")</code></td><td>Read a query-string value.</td></tr>
+<tr><td><code>param("name")</code></td><td>Read a route parameter.</td></tr>
 <tr><td><code>session_set(...)</code></td><td>Store session data.</td></tr>
 <tr><td><code>session_get(...)</code></td><td>Read session data.</td></tr>
-<tr><td><code>session_clear()</code></td><td>Clear the current session.</td></tr>
+<tr><td><code>session_clear()</code></td><td>Clear session data.</td></tr>
 <tr><td><code>RATE_LIMIT(path, count, seconds)</code></td><td>Configure route rate limiting.</td></tr>
-<tr><td><code>upload_save(...)</code></td><td>Save a multipart upload.</td></tr>
-<tr><td><code>upload_name()</code></td><td>Get upload filename.</td></tr>
-<tr><td><code>upload_size()</code></td><td>Get upload size.</td></tr>
-<tr><td><code>upload_ext()</code></td><td>Get upload extension.</td></tr>
-</table>
-
-<h3>Request and security capabilities</h3>
-<table>
-<tr><th>Feature</th><th>Behavior</th></tr>
-<tr><td>URL-encoded forms</td><td>Parse submitted form fields.</td></tr>
-<tr><td>Multipart requests</td><td>Handle file upload requests.</td></tr>
-<tr><td>CSRF tokens</td><td>Automatic HTML form integration and request verification.</td></tr>
-<tr><td>CSRF header</td><td>Accept <code>X-Lite-CSRF-Token</code> for JavaScript requests.</td></tr>
-<tr><td>Sessions</td><td>Session-backed user state.</td></tr>
-<tr><td>Rate limiting</td><td>Limit repeated requests to configured routes.</td></tr>
-</table>
+<tr><td><code>upload_save(...)</code></td><td>Save a multipart file.</td></tr>
+<tr><td><code>upload_name()</code>, <code>upload_type()</code>, <code>upload_ext()</code>, <code>upload_size()</code></td><td>Read upload metadata.</td></tr>
+<tr><td>WebSocket API</td><td>Handshake, messaging, ping/pong, close and broadcast; exact callback names are defined by the header.</td></tr></table>
 </section>
 
 <section id="example">
-<h2>Complete application example</h2>
-<p>A small example combining routing, templates, forms, sessions, CSRF and rate limiting.</p>
-
-<pre><code>#include "lite-secure.h"
-
-RATE_LIMIT("/login", 5, 60);
+<h2>Complete HTTP application example</h2>
+<p>This example demonstrates the concise route API, form handling, sessions and the event-driven server entry point. It does not include worker or WebSocket callbacks because those require the exact callback signatures from the chosen header version.</p>
+<pre><code>#include "lite_epoll.h"
 
 GET("/") {
     return render("index.html");
+}
+
+POST("/login") {
+    char *username = form_get("username", "");
+    char *password = form_get("password", "");
+
+    if (!username[0] || !password[0])
+        return text("Username and password required");
+
+    session_set("username", username);
+    return redirect("/dashboard");
 }
 
 GET("/dashboard") {
@@ -587,19 +456,7 @@ GET("/dashboard") {
     if (!username)
         return redirect("/");
 
-    return render("dashboard.html",
-        "username", username);
-}
-
-POST("/login") {
-    const char *username = form("username");
-
-    if (!username || !username[0])
-        return text("Username required");
-
-    session_set("username", username);
-
-    return redirect("/dashboard");
+    return render("dashboard.html", "username", username);
 }
 
 POST("/logout") {
@@ -607,143 +464,81 @@ POST("/logout") {
     return redirect("/");
 }
 
-run(8200);</code></pre>
-
-<p>Example <code>templates/index.html</code>:</p>
-<pre><code>&lt;h1&gt;liteC Login&lt;/h1&gt;
-
+run(8080);</code></pre>
+<p><code>templates/index.html</code>:</p>
+<pre><code>&lt;h1&gt;LiteC Login&lt;/h1&gt;
 &lt;form action="/login" method="POST"&gt;
-    &lt;input name="username" required
-           placeholder="Username"&gt;
-    &lt;button type="submit"&gt;Login&lt;/button&gt;
+  &lt;input name="username" required placeholder="Username"&gt;
+  &lt;input name="password" type="password" required&gt;
+  &lt;button type="submit"&gt;Login&lt;/button&gt;
 &lt;/form&gt;</code></pre>
-
-<p>Example <code>templates/dashboard.html</code>:</p>
+<p><code>templates/dashboard.html</code>:</p>
 <pre><code>&lt;h1&gt;Welcome, {{ username }}&lt;/h1&gt;
-
 &lt;form action="/logout" method="POST"&gt;
-    &lt;button type="submit"&gt;Logout&lt;/button&gt;
+  &lt;button type="submit"&gt;Logout&lt;/button&gt;
 &lt;/form&gt;</code></pre>
-
-<p>When automatic CSRF protection is active, supported POST forms receive the required token integration from liteC.</p>
-</section>
-
-<section id="roadmap">
-<h2>Planned and verify</h2>
-<p>These items should only be documented as available after their implementation and public API have been confirmed.</p>
-
-<div class="grid">
-<div class="tile"><b>JSON helpers</b><span class="tag plan">Verify</span><br><span>Dedicated JSON response and parsing APIs.</span></div>
-<div class="tile"><b>Database integration</b><span class="tag plan">Planned</span><br><span>Database access and persistence.</span></div>
-<div class="tile"><b>Static file serving</b><span class="tag plan">Verify</span><br><span>Serving CSS, JavaScript, images and assets.</span></div>
-<div class="tile"><b>Middleware API</b><span class="tag plan">Verify</span><br><span>Reusable application request processing.</span></div>
-<div class="tile"><b>Cookie helpers</b><span class="tag plan">Verify</span><br><span>Public cookie management API.</span></div>
-<div class="tile"><b>Advanced upload validation</b><span class="tag plan">Verify</span><br><span>Convenience validation and content inspection helpers.</span></div>
-<div class="tile"><b>Template loops</b><span class="tag plan">Verify</span><br><span>Collection iteration in templates.</span></div>
-</div>
-
-<p>Update this section whenever a feature becomes implemented and tested. Do not publish proposed helper names as working APIs.</p>
 </section>
 
 <section id="conventions">
-<h2>Project conventions</h2>
+<h2>Performance & application best practices</h2>
 <ul>
-<li>Prefer concise <code>GET()</code> and <code>POST()</code> route blocks.</li>
-<li>Use framework helpers instead of rewriting request parsing manually.</li>
-<li>Use <code>const char *</code> for read-only strings returned by request and session helpers.</li>
-<li>Keep templates in the <code>templates/</code> directory.</li>
-<li>Use automatic CSRF integration for ordinary HTML forms.</li>
-<li>Send the CSRF header for JavaScript requests.</li>
-<li>Use rate limiting for sensitive endpoints.</li>
-<li>Validate uploaded files before trusting or serving them.</li>
-<li>Keep optional features optional for application developers.</li>
-<li>Preserve existing API behavior when adding new functionality.</li>
+<li>Keep ordinary route handlers short because they execute on the event-loop thread.</li>
+<li>Use the worker pool for slow blocking operations; do not block the event loop with sleeps or synchronous long-running work.</li>
+<li>Do not access request/response globals from worker threads unless the API explicitly supports it.</li>
+<li>Compile worker-enabled applications with <code>-pthread</code>.</li>
+<li>Keep WebSocket callbacks short and use the worker facility for expensive processing.</li>
+<li>Use <code>form_get("field", "")</code> for submitted form values.</li>
+<li>Keep templates in <code>templates/</code> and static assets in the configured static directory.</li>
+<li>Prepare upload directories and validate uploaded content.</li>
+<li>Use CSRF protection for authenticated browser POST requests except for deliberately configured exemptions.</li>
+<li>Use rate limiting on login, registration and other sensitive routes.</li>
+<li>Preserve the simple <code>GET()</code>, <code>POST()</code> and <code>run(port)</code> application style.</li>
 </ul>
 </section>
 
-<footer>
-<strong>liteC Documentation</strong><br>
-Lightweight web development in C.<br>
-Keep this documentation synchronized with the actual framework header and tested examples.
-</footer>
+<section id="roadmap">
+<h2>Implementation notes & verification</h2>
+<div class="grid">
+<div class="tile"><b>epoll HTTP engine</b><span class="tag">Current architecture</span><br><span>Non-blocking sockets and event-loop connection management.</span></div>
+<div class="tile"><b>WebSockets</b><span class="tag">Integrated development work</span><br><span>Handshake, messages, control frames and broadcast support.</span></div>
+<div class="tile"><b>Worker pool</b><span class="tag">Integrated development work</span><br><span>Offload blocking work from the event loop.</span></div>
+<div class="tile"><b>Database wrapper</b><span class="tag plan">Separate work</span><br><span>Keep the planned reusable procedural MySQL wrapper independent of the HTTP server lifecycle.</span></div>
+<div class="tile"><b>Additional JSON APIs</b><span class="tag plan">Verify</span><br><span>Publish only after confirming the exact public API in the release header.</span></div>
+<div class="tile"><b>Cross-platform event backends</b><span class="tag plan">Future</span><br><span>epoll is Linux-specific; other operating systems need their own backend or portability layer.</span></div>
+</div>
+<p>Before publishing a release, compile the examples against the exact release header and test HTTP routes, concurrent clients, slow worker tasks, WebSocket handshake and messaging, forms, sessions, CSRF behavior, static files and multipart uploads. Do not describe a feature as production-ready solely because it exists in a development header.</p>
+</section>
 
+<footer><strong>liteC Documentation</strong><br>Event-driven web development in C.<br>Keep this page synchronized with the exact release header and verified examples.</footer>
 </main>
 </div>
-
 <script>
-const menu = document.getElementById('menu');
-const sidebar = document.getElementById('sidebar');
-
-menu.addEventListener('click', () => {
-    sidebar.classList.toggle('open');
+const menu=document.getElementById('menu');
+const sidebar=document.getElementById('sidebar');
+menu.addEventListener('click',()=>sidebar.classList.toggle('open'));
+sidebar.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>sidebar.classList.remove('open')));
+document.querySelectorAll('pre').forEach(pre=>{
+ const button=document.createElement('button');button.className='copy';button.textContent='Copy';
+ button.addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(pre.querySelector('code').innerText);button.textContent='Copied!';setTimeout(()=>button.textContent='Copy',1200)}
+  catch(error){button.textContent='Select code'}
+ });
+ pre.appendChild(button);
 });
-
-sidebar.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-        sidebar.classList.remove('open');
-    });
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+ const q=search.value.trim().toLowerCase();
+ document.querySelectorAll('main section').forEach(section=>section.classList.toggle('hidden',!!q&&!section.innerText.toLowerCase().includes(q)));
+ const hero=document.querySelector('.hero');hero.classList.toggle('hidden',!!q&&!hero.innerText.toLowerCase().includes(q));
 });
-
-document.querySelectorAll('pre').forEach(pre => {
-    const button = document.createElement('button');
-    button.className = 'copy';
-    button.textContent = 'Copy';
-
-    button.addEventListener('click', async () => {
-        const code = pre.querySelector('code').innerText;
-
-        try {
-            await navigator.clipboard.writeText(code);
-            button.textContent = 'Copied!';
-            setTimeout(() => button.textContent = 'Copy', 1200);
-        } catch (error) {
-            button.textContent = 'Select code';
-        }
-    });
-
-    pre.appendChild(button);
-});
-
-const search = document.getElementById('search');
-
-search.addEventListener('input', () => {
-    const q = search.value.trim().toLowerCase();
-
-    document.querySelectorAll('main section').forEach(section => {
-        section.classList.toggle(
-            'hidden',
-            !!q && !section.innerText.toLowerCase().includes(q)
-        );
-    });
-
-    const hero = document.querySelector('.hero');
-    hero.classList.toggle(
-        'hidden',
-        !!q && !hero.innerText.toLowerCase().includes(q)
-    );
-});
-
-const links = [...sidebar.querySelectorAll('a')];
-
-if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                links.forEach(link => {
-                    link.classList.toggle(
-                        'active',
-                        link.getAttribute('href') === '#' + entry.target.id
-                    );
-                });
-            }
-        });
-    }, {
-        rootMargin: '-20% 0px -70% 0px'
-    });
-
-    document.querySelectorAll('main section, .hero').forEach(section => {
-        observer.observe(section);
-    });
+const links=[...sidebar.querySelectorAll('a')];
+if('IntersectionObserver' in window){
+ const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+   if(entry.isIntersecting)links.forEach(link=>link.classList.toggle('active',link.getAttribute('href')==='#'+entry.target.id));
+  });
+ },{rootMargin:'-20% 0px -70% 0px'});
+ document.querySelectorAll('main section,.hero').forEach(section=>observer.observe(section));
 }
 </script>
 </body>
